@@ -4,14 +4,13 @@ import pylab as plt
 from model import Generator
 from data import restore_network, onehot, recover_image
 
-netG = Generator()
-netG = restore_network("./", 0, netG)
-
-BATCH_SIZE = 25
 NZ = 100
 NUM_CLASS = 10
+BATCH_SIZE = 25
 DEVICE = "cpu"
 
+netG = Generator()
+netG = restore_network("./", 0, netG)
 fix_noise = torch.randn(BATCH_SIZE, NZ, device=DEVICE)
 fix_input_c = (torch.rand(BATCH_SIZE, 1) * NUM_CLASS).type(torch.LongTensor).squeeze().to(DEVICE)
 fix_input_c = onehot(fix_input_c, NUM_CLASS)

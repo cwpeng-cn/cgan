@@ -15,7 +15,7 @@ WORKER = 1
 LR = 0.0002
 NZ = 100
 NUM_CLASS = 10
-EPOCH = 300
+EPOCH = 50
 
 data_loader = loadMNIST(img_size=IMAGE_SIZE, batch_size=BATCH_SIZE)
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -125,7 +125,7 @@ for epoch in range(EPOCH):
         # 输出损失状态
         if iters % 5 == 0:
             print('[%d/%d][%d/%d]\tLoss_D: %.4f\tLoss_G: %.4f\tD(x): %.4f\tD(G(z)): %.4f / %.4f'
-                  % (epoch, EPOCH, iters, len(data_loader),
+                  % (epoch, EPOCH, iters % len(data_loader), len(data_loader),
                      errD.item(), errG.item(), D_x, D_G_z1, D_G_z2))
             d_writer.add(loss=errD.item(), i=iters)
             g_writer.add(loss=errG.item(), i=iters)
