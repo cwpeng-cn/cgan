@@ -24,7 +24,8 @@ def loadMNIST(img_size, batch_size):  # MNIST图片的大小是28*28
 
 
 def onehot(label, num_class):
+    device = "cuda" if torch.cuda.is_available() else "cpu"
     n = label.shape[0]
-    onehot_label = torch.zeros(n, num_class, dtype=label.dtype)
+    onehot_label = torch.zeros(n, num_class, dtype=label.dtype).to(device)
     onehot_label = onehot_label.scatter_(1, label.view(n, 1), 1)
     return onehot_label
