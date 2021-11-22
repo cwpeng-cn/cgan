@@ -44,6 +44,7 @@ for epoch in range(EPOCH):
         #################################################
         netD.zero_grad()
         real_imgs, input_c = data
+        input_c = input_c.to(device)
         input_c = onehot(input_c, NUM_CLASS).to(device)
 
         # 1.1 来自数据集的样本
