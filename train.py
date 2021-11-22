@@ -61,7 +61,7 @@ for epoch in range(EPOCH):
         # 1.2 生成随机向量
         noise = torch.randn(b_size, NZ, device=device)
         # 生成随机标签
-        input_c = (torch.rand(b_size, 1) * NUM_CLASS).type(torch.LongTensor).squeeze()
+        input_c = (torch.rand(b_size, 1) * NUM_CLASS).type(torch.LongTensor).squeeze().to(device)
         input_c = onehot(input_c, NUM_CLASS)
         # 来自生成器生成的样本
         fake = netG(noise, input_c)
@@ -91,7 +91,7 @@ for epoch in range(EPOCH):
         # 输入生成器的生成的假样本
         output = netD(fake, input_c).view(-1)
         # 生成随机标签
-        input_c = (torch.rand(b_size, 1) * NUM_CLASS).type(torch.LongTensor).squeeze()
+        input_c = (torch.rand(b_size, 1) * NUM_CLASS).type(torch.LongTensor).squeeze().to(device)
         input_c = onehot(input_c, NUM_CLASS)
         # 对生成器计算损失
         errG = criterion(output, label)
