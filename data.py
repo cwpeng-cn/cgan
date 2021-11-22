@@ -1,4 +1,6 @@
+import os
 import torch
+import numpy as np
 from torchvision import transforms
 from torch.utils.data import DataLoader
 from torchvision.datasets import MNIST
@@ -29,3 +31,32 @@ def onehot(label, num_class):
     onehot_label = torch.zeros(n, num_class, dtype=label.dtype).to(device)
     onehot_label = onehot_label.scatter_(1, label.view(n, 1), 1)
     return onehot_label
+
+
+def save_network(path, network, epoch_label, is_only_parameter=True):
+    save_filename = 'net_%s.pth' % epoch_label
+    save_path = os.path.join(path, save_filename)
+    if is_only_parameter:
+        state = network.state_dict()
+        for key in state: state[key] = state[key].clone().cpu()
+        torch.save(network.state_dict(), save_path, _use_new_zipfile_serialization=False)
+    else:
+        torch.save(network.cpu(), save_path)
+
+
+def restore_network(path, epoch, network=None):
+    path = os.path.join(path, 'net_%s.pth' % epoch)
+    if network is None:
+        network = torch.load(path)
+    else:
+        network.load_state_dict(torch.load(path, map_location=torch.device('cpu')))
+    return network
+
+
+def recover_image(img):
+    return (
+            (img.numpy() *
+             np.array([0.5]).reshape((1, 1, 1, 1)) +
+             np.array([0.5]).reshape((1, 1, 1, 1))
+             ).transpose(0, 2, 3, 1) * 255
+    ).clip(0, 255).astype(np.uint8)
