@@ -15,7 +15,7 @@ DEVICE = "cpu"
 fix_noise = torch.randn(BATCH_SIZE, NZ, device=DEVICE)
 fix_input_c = (torch.rand(BATCH_SIZE, 1) * NUM_CLASS).type(torch.LongTensor).squeeze().to(DEVICE)
 fix_input_c = onehot(fix_input_c, NUM_CLASS)
-fake_imgs = netG(fix_noise, fix_input_c).detach()
+fake_imgs = netG(fix_noise, fix_input_c).detach().cpu()
 
 images = recover_image(fake_imgs)
 full_image = np.full((5 * 64, 5 * 64, 3), 0, dtype="uint8")

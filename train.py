@@ -45,7 +45,7 @@ for epoch in range(EPOCH):
     print("正在保存网络并评估...")
     save_network(MODEL_G_PATH, netG, epoch)
     with torch.no_grad():
-        fake_imgs = netG(fix_noise, fix_input_c).detach()
+        fake_imgs = netG(fix_noise, fix_input_c).detach().cpu()
 
         images = recover_image(fake_imgs)
         full_image = np.full((5 * 64, 5 * 64, 3), 0, dtype="uint8")
