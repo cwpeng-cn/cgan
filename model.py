@@ -71,8 +71,9 @@ class Discriminator(nn.Module):
         self.apply(weights_init)
 
     def forward(self, images, onehot_label):
+        device = 'cuda' if torch.cuda.is_available() else 'cpu'
         h, w = images.shape[2:]
         n, nc = onehot_label.shape[:2]
-        label = onehot_label.view(n, nc, 1, 1) * torch.ones([n, nc, h, w])
+        label = onehot_label.view(n, nc, 1, 1) * torch.ones([n, nc, h, w]).to(device)
         input_ = torch.cat([images, label], 1)
         return self.main(input_)
